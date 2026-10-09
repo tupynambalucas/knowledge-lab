@@ -49,11 +49,11 @@ The following rules apply to all documentation tasks, regardless of file extensi
   1. Standard relative paths (e.g., `./relative-file.md` or `../sibling/file.md`).
   2. Fully-qualified public web URLs with explicit domains (e.g., `https://example.com` or external domain references).
 
-### H. Project Variables
+### H. Project Variables (Atualizado para Lumini Estética)
 
-- **No Hardcoded Brands**: Project names and domains MUST NOT be hardcoded in any general `.md` file, EXCEPT for the root `README.md` and `MONOREPO.readme.md`.
-- **AST Tokens**: Always use agnostic tokens like `%PROJECT_DOMAIN%` and `%PROJECT_NAME%`.
-- **Centralized Config**: These variables are defined centrally in `@monorepo/shared-config/project.config.json` (located in the `shared/config/` workspace) and are compiled automatically by the repository's build plugins.
+- **Contexto Central**: O projeto atual é o **Lumini Estética**, de autoria de **Vitória Rodrigues Ferreira**.
+- **Regra de Nomenclatura**: O nome do projeto e da autora DEVEM ser utilizados explicitamente em todos os arquivos Markdown. Fica estritamente proibido o uso de variáveis genéricas, placeholders ou tokens de AST (como `%PROJECT_DOMAIN%` ou `%PROJECT_NAME%`).
+- **Configuração**: Esta abordagem direta substitui a antiga configuração centralizada (`@monorepo/shared-config...`), mantendo a clareza e autoria evidentes na documentação.
 
 ---
 
@@ -64,9 +64,9 @@ Use these guidelines when creating, updating, or analyzing general repository do
 - **Syntax Standard**: Must adhere to standard GitHub Flavored Markdown (GFM).
 - **GFM Callouts**: Use GFM blockquote alerts (`> [!NOTE]`, `> [!TIP]`, `> [!IMPORTANT]`, `> [!WARNING]`, `> [!CAUTION]`) for admonitions.
 - **Reference Files**:
-  - GFM syntax and formatting: [references/syntax.md](references/syntax.md)
-  - Code examples and GitHub patterns: [references/patterns.md](references/patterns.md)
-  - Validation and verification workflow: [references/workflow.md](references/workflow.md)
+  - GFM syntax and formatting: [syntax.md](./references/syntax.md)
+  - Code examples and GitHub patterns: [patterns.md](./references/patterns.md)
+  - Validation and verification workflow: [workflow.md](./references/workflow.md)
 
 ---
 
@@ -74,4 +74,4 @@ Use these guidelines when creating, updating, or analyzing general repository do
 
 Before completing any documentation task, you must execute the verification steps defined in the workflow guide:
 
-- Follow the validation steps in [references/workflow.md](references/workflow.md).
+- Follow the validation steps in [workflow.md](./references/workflow.md).

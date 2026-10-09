@@ -1,5 +1,5 @@
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from 'fs';
+import * as path from 'path';
 
 interface ValidationResult {
   filePath: string;
@@ -12,17 +12,17 @@ const MAX_COMPATIBILITY_LENGTH = 500;
 const MAX_SKILL_MD_LINES = 500;
 
 const ALLOWED_FIELDS = new Set([
-  "name",
-  "description",
-  "license",
-  "allowed-tools",
-  "metadata",
-  "compatibility",
+  'name',
+  'description',
+  'license',
+  'allowed-tools',
+  'metadata',
+  'compatibility',
 ]);
 
 function printUsage(): void {
   console.log(
-    "Usage: npx tsx .agents/skills/skill-expert/scripts/validate-skill.ts --path <skill-directory>",
+    'Usage: npx tsx .agents/skills/skill-expert/scripts/validate-skill.ts --path <skill-directory>',
   );
 }
 
@@ -36,13 +36,10 @@ function findMdFiles(dir: string): string[] {
     const filePath = path.join(dir, file);
     const stat = fs.statSync(filePath);
     if (stat !== undefined && stat.isDirectory() === true) {
-      if (file !== "node_modules" && file !== ".git") {
+      if (file !== 'node_modules' && file !== '.git') {
         results.push(...findMdFiles(filePath));
       }
-    } else if (
-      file.endsWith(".md") === true ||
-      file.endsWith(".mdx") === true
-    ) {
+    } else if (file.endsWith('.md') === true || file.endsWith('.mdx') === true) {
       results.push(filePath);
     }
   }
@@ -60,17 +57,17 @@ function parseYamlFrontmatter(rawYaml: string): ParsedFrontmatter {
   const lines = rawYaml.split(/\r?\n/);
 
   let currentKey: string | null = null;
-  let multilineType: "folded" | "literal" | null = null;
+  let multilineType: 'folded' | 'literal' | null = null;
   let multilineBuffer: string[] = [];
   let inMetadataMap = false;
   const metadataMap: Record<string, string> = {};
 
   function flushMultiline(): void {
     if (currentKey !== null) {
-      if (multilineType === "folded") {
-        data[currentKey] = multilineBuffer.join(" ").trim();
-      } else if (multilineType === "literal") {
-        data[currentKey] = multilineBuffer.join("\n").trim();
+      if (multilineType === 'folded') {
+        data[currentKey] = multilineBuffer.join(' ').trim();
+      } else if (multilineType === 'literal') {
+        data[currentKey] = multilineBuffer.join('\n').trim();
       }
     }
     currentKey = null;
@@ -80,7 +77,7 @@ function parseYamlFrontmatter(rawYaml: string): ParsedFrontmatter {
 
   function flushMetadata(): void {
     if (inMetadataMap === true) {
-      data["metadata"] = { ...metadataMap };
+      data['metadata'] = { ...metadataMap };
       inMetadataMap = false;
     }
   }
@@ -89,15 +86,12 @@ function parseYamlFrontmatter(rawYaml: string): ParsedFrontmatter {
     const line = lines[i];
     const trimmed = line.trim();
 
-    if (trimmed === "" || trimmed.startsWith("#")) {
+    if (trimmed === '' || trimmed.startsWith('#')) {
       continue;
     }
 
     // Check if indented under multiline scalar
-    if (
-      multilineType !== null &&
-      (line.startsWith("  ") || line.startsWith("\t"))
-    ) {
+    if (multilineType !== null && (line.startsWith('  ') || line.startsWith('\t'))) {
       multilineBuffer.push(trimmed);
       continue;
     } else if (multilineType !== null) {
@@ -105,11 +99,8 @@ function parseYamlFrontmatter(rawYaml: string): ParsedFrontmatter {
     }
 
     // Check if indented under metadata map
-    if (
-      inMetadataMap === true &&
-      (line.startsWith("  ") || line.startsWith("\t"))
-    ) {
-      const sep = trimmed.indexOf(":");
+    if (inMetadataMap === true && (line.startsWith('  ') || line.startsWith('\t'))) {
+      const sep = trimmed.indexOf(':');
       if (sep !== -1) {
         const subKey = trimmed.slice(0, sep).trim();
         let subVal = trimmed.slice(sep + 1).trim();
@@ -126,7 +117,7 @@ function parseYamlFrontmatter(rawYaml: string): ParsedFrontmatter {
       flushMetadata();
     }
 
-    const colonIndex = line.indexOf(":");
+    const colonIndex = line.indexOf(':');
     if (colonIndex === -1) {
       continue;
     }
@@ -134,31 +125,28 @@ function parseYamlFrontmatter(rawYaml: string): ParsedFrontmatter {
     const key = line.slice(0, colonIndex).trim();
     let val = line.slice(colonIndex + 1).trim();
 
-    if (key === "metadata") {
-      if (val === "" || val === "{}") {
+    if (key === 'metadata') {
+      if (val === '' || val === '{}') {
         inMetadataMap = true;
       }
       continue;
     }
 
-    if (val === ">" || val === ">-") {
+    if (val === '>' || val === '>-') {
       currentKey = key;
-      multilineType = "folded";
+      multilineType = 'folded';
       multilineBuffer = [];
       continue;
     }
 
-    if (val === "|" || val === "|-") {
+    if (val === '|' || val === '|-') {
       currentKey = key;
-      multilineType = "literal";
+      multilineType = 'literal';
       multilineBuffer = [];
       continue;
     }
 
-    if (
-      (val.startsWith('"') && val.endsWith('"')) ||
-      (val.startsWith("'") && val.endsWith("'"))
-    ) {
+    if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
       val = val.slice(1, -1);
     }
 
@@ -178,15 +166,13 @@ function validateSkillDir(targetDir: string): boolean {
     return false;
   }
 
-  let skillMdPath = path.join(absoluteTargetDir, "SKILL.md");
+  let skillMdPath = path.join(absoluteTargetDir, 'SKILL.md');
   if (fs.existsSync(skillMdPath) === false) {
-    const lowercasePath = path.join(absoluteTargetDir, "skill.md");
+    const lowercasePath = path.join(absoluteTargetDir, 'skill.md');
     if (fs.existsSync(lowercasePath) === true) {
       skillMdPath = lowercasePath;
     } else {
-      console.error(
-        `Error: Required file SKILL.md not found in ${absoluteTargetDir}`,
-      );
+      console.error(`Error: Required file SKILL.md not found in ${absoluteTargetDir}`);
       return false;
     }
   }
@@ -196,7 +182,7 @@ function validateSkillDir(targetDir: string): boolean {
 
   // 1. Validate SKILL.md Frontmatter and Line Count
   const skillMdErrors: string[] = [];
-  const skillMdContent = fs.readFileSync(skillMdPath, "utf-8");
+  const skillMdContent = fs.readFileSync(skillMdPath, 'utf-8');
   const lineCount = skillMdContent.split(/\r?\n/).length;
 
   if (lineCount >= MAX_SKILL_MD_LINES) {
@@ -220,31 +206,24 @@ function validateSkillDir(targetDir: string): boolean {
 
     // Validate allowed fields only (Spec strictness)
     const presentKeys = Object.keys(frontmatter);
-    const extraFields = presentKeys.filter(
-      (k) => ALLOWED_FIELDS.has(k) === false,
-    );
+    const extraFields = presentKeys.filter((k) => ALLOWED_FIELDS.has(k) === false);
     if (extraFields.length > 0) {
-      const allowedSorted = Array.from(ALLOWED_FIELDS).sort().join(", ");
+      const allowedSorted = Array.from(ALLOWED_FIELDS).sort().join(', ');
       skillMdErrors.push(
-        `Unexpected fields in frontmatter: ${extraFields.sort().join(", ")}. Only [${allowedSorted}] are allowed.`,
+        `Unexpected fields in frontmatter: ${extraFields.sort().join(', ')}. Only [${allowedSorted}] are allowed.`,
       );
     }
 
     // Name Validation
     if (frontmatter.name === undefined) {
       skillMdErrors.push("Missing required field in frontmatter: 'name'.");
-    } else if (
-      typeof frontmatter.name !== "string" ||
-      frontmatter.name.trim() === ""
-    ) {
+    } else if (typeof frontmatter.name !== 'string' || frontmatter.name.trim() === '') {
       skillMdErrors.push("Field 'name' must be a non-empty string.");
     } else {
       const name = frontmatter.name.trim();
       const parentDirName = path.basename(absoluteTargetDir);
       if (name !== parentDirName) {
-        skillMdErrors.push(
-          `Directory name '${parentDirName}' must match skill name '${name}'.`,
-        );
+        skillMdErrors.push(`Directory name '${parentDirName}' must match skill name '${name}'.`);
       }
 
       if (name.length < 1 || name.length > MAX_SKILL_NAME_LENGTH) {
@@ -257,12 +236,12 @@ function validateSkillDir(targetDir: string): boolean {
         skillMdErrors.push(`Skill name '${name}' must be lowercase.`);
       }
 
-      if (name.startsWith("-") === true || name.endsWith("-") === true) {
-        skillMdErrors.push("Skill name cannot start or end with a hyphen.");
+      if (name.startsWith('-') === true || name.endsWith('-') === true) {
+        skillMdErrors.push('Skill name cannot start or end with a hyphen.');
       }
 
-      if (name.includes("--") === true) {
-        skillMdErrors.push("Skill name cannot contain consecutive hyphens.");
+      if (name.includes('--') === true) {
+        skillMdErrors.push('Skill name cannot contain consecutive hyphens.');
       }
 
       const nameRegex = /^[a-z0-9-]+$/;
@@ -275,12 +254,10 @@ function validateSkillDir(targetDir: string): boolean {
 
     // Description Validation
     if (frontmatter.description === undefined) {
-      skillMdErrors.push(
-        "Missing required field in frontmatter: 'description'.",
-      );
+      skillMdErrors.push("Missing required field in frontmatter: 'description'.");
     } else if (
-      typeof frontmatter.description !== "string" ||
-      frontmatter.description.trim() === ""
+      typeof frontmatter.description !== 'string' ||
+      frontmatter.description.trim() === ''
     ) {
       skillMdErrors.push("Field 'description' must be a non-empty string.");
     } else {
@@ -294,7 +271,7 @@ function validateSkillDir(targetDir: string): boolean {
 
     // Compatibility Validation
     if (frontmatter.compatibility !== undefined) {
-      if (typeof frontmatter.compatibility !== "string") {
+      if (typeof frontmatter.compatibility !== 'string') {
         skillMdErrors.push("Field 'compatibility' must be a string.");
       } else if (frontmatter.compatibility.length > MAX_COMPATIBILITY_LENGTH) {
         skillMdErrors.push(
@@ -304,36 +281,29 @@ function validateSkillDir(targetDir: string): boolean {
     }
 
     // Allowed-Tools Validation
-    if (frontmatter["allowed-tools"] !== undefined) {
-      if (typeof frontmatter["allowed-tools"] !== "string") {
-        skillMdErrors.push(
-          "Field 'allowed-tools' must be a space-separated string.",
-        );
+    if (frontmatter['allowed-tools'] !== undefined) {
+      if (typeof frontmatter['allowed-tools'] !== 'string') {
+        skillMdErrors.push("Field 'allowed-tools' must be a space-separated string.");
       }
     }
 
     // License Validation
-    if (
-      frontmatter.license !== undefined &&
-      typeof frontmatter.license !== "string"
-    ) {
+    if (frontmatter.license !== undefined && typeof frontmatter.license !== 'string') {
       skillMdErrors.push("Field 'license' must be a string.");
     }
 
     // Metadata Validation
     if (frontmatter.metadata !== undefined) {
       if (
-        typeof frontmatter.metadata !== "object" ||
+        typeof frontmatter.metadata !== 'object' ||
         frontmatter.metadata === null ||
         Array.isArray(frontmatter.metadata)
       ) {
-        skillMdErrors.push(
-          "Field 'metadata' must be a key-value mapping of strings.",
-        );
+        skillMdErrors.push("Field 'metadata' must be a key-value mapping of strings.");
       } else {
         const meta = frontmatter.metadata as Record<string, unknown>;
         for (const [mk, mv] of Object.entries(meta)) {
-          if (typeof mv !== "string") {
+          if (typeof mv !== 'string') {
             skillMdErrors.push(
               `Metadata entry '${mk}' must have a string value, received ${typeof mv}.`,
             );
@@ -358,7 +328,7 @@ function validateSkillDir(targetDir: string): boolean {
   for (const filePath of mdFiles) {
     const fileErrors: string[] = [];
     const relativePath = path.relative(absoluteTargetDir, filePath);
-    const content = fs.readFileSync(filePath, "utf-8");
+    const content = fs.readFileSync(filePath, 'utf-8');
 
     // Check for Emojis
     emojiRegex.lastIndex = 0;
@@ -367,15 +337,12 @@ function validateSkillDir(targetDir: string): boolean {
       const realEmojis = emojiMatches.filter((emoji) => {
         const charCode = emoji.charCodeAt(0);
         if (charCode >= 48 && charCode <= 57) return false;
-        if (emoji === "*" || emoji === "#" || emoji === "©" || emoji === "®")
-          return false;
+        if (emoji === '*' || emoji === '#' || emoji === '©' || emoji === '®') return false;
         return true;
       });
 
       if (realEmojis.length > 0) {
-        fileErrors.push(
-          `Found forbidden emojis: ${Array.from(new Set(realEmojis)).join(", ")}`,
-        );
+        fileErrors.push(`Found forbidden emojis: ${Array.from(new Set(realEmojis)).join(', ')}`);
       }
     }
 
@@ -384,26 +351,22 @@ function validateSkillDir(targetDir: string): boolean {
     let linkMatch;
     while ((linkMatch = markdownLinkRegex.exec(content)) !== null) {
       const url = linkMatch[1].trim();
-      if (url.toLowerCase().startsWith("file:///")) {
+      if (url.toLowerCase().startsWith('file:///')) {
         fileErrors.push(`Found forbidden 'file:///' link target: "${url}"`);
       }
-      if (url.startsWith("/") === true && url.startsWith("//") === false) {
-        fileErrors.push(
-          `Found forbidden absolute markdown link target: "${url}"`,
-        );
+      if (url.startsWith('/') === true && url.startsWith('//') === false) {
+        fileErrors.push(`Found forbidden absolute markdown link target: "${url}"`);
       }
     }
 
     // Scan for windows drive letter patterns in links or plain text
     const driveLetterRegex = /\b[A-Za-z]:[\\/]/g;
     if (driveLetterRegex.test(content) === true) {
-      fileErrors.push("Found absolute Windows file path (e.g. C:\\ or D:\\).");
+      fileErrors.push('Found absolute Windows file path (e.g. C:\\ or D:\\).');
     }
 
     if (fileErrors.length > 0) {
-      const existingResultIndex = results.findIndex(
-        (r) => r.filePath === relativePath,
-      );
+      const existingResultIndex = results.findIndex((r) => r.filePath === relativePath);
       if (existingResultIndex !== -1) {
         results[existingResultIndex].errors.push(...fileErrors);
       } else {
@@ -415,16 +378,14 @@ function validateSkillDir(targetDir: string): boolean {
 
   // 3. Output results
   if (hasErrors === true) {
-    console.error(
-      `\n=== Skill Validation FAILED for: ${absoluteTargetDir} ===`,
-    );
+    console.error(`\n=== Skill Validation FAILED for: ${absoluteTargetDir} ===`);
     for (const res of results) {
       console.error(`\nFile: ${res.filePath}`);
       for (const err of res.errors) {
         console.error(`  - ${err}`);
       }
     }
-    console.error("\n=============================================");
+    console.error('\n=============================================');
     return false;
   }
 
@@ -434,16 +395,16 @@ function validateSkillDir(targetDir: string): boolean {
 
 function main(): void {
   const args = process.argv.slice(2);
-  let targetPath = "";
+  let targetPath = '';
 
   for (let i = 0; i < args.length; i++) {
-    if (args[i] === "--path" && i + 1 < args.length) {
+    if (args[i] === '--path' && i + 1 < args.length) {
       targetPath = args[i + 1];
       break;
     }
   }
 
-  if (targetPath === "") {
+  if (targetPath === '') {
     printUsage();
     process.exit(1);
   }

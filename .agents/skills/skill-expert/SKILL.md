@@ -46,7 +46,7 @@ fail validation:
 | `metadata`      | No       | Map    | Key-value mapping from string keys to string values for custom client-specific properties.                                                                                                                                |
 | `allowed-tools` | No       | String | Space-separated list of pre-approved tools the skill requires (e.g., `Bash(git:*) Read`).                                                                                                                                 |
 
-For complete frontmatter details, read [specification.md](references/specification.md).
+For complete frontmatter details, read [specification.md](./references/specification.md).
 
 ---
 
@@ -68,7 +68,7 @@ model:
 - Bulky documentation, extensive schema matrices, and edge-case catalogs MUST be extracted to
   separate files in `references/`.
 - Tell the agent _exactly when_ to read reference files:
-  > Read [api-errors.md](references/api-errors.md) if the endpoint returns a non-200 status code.
+  > Read [api-errors.md](./references/api-errors.md) if the endpoint returns a non-200 status code.
 - Keep file references one level deep from `SKILL.md`. Avoid deep nesting chains.
 
 ---
@@ -104,7 +104,7 @@ Follow these core practices when drafting skill instructions:
 - **Plan-Validate-Execute**: For destructive or batch operations, create a structured plan, validate
   against the source of truth, and execute only upon approval.
 
-For in-depth authoring patterns and design principles, read [best-practices.md](references/best-practices.md).
+For in-depth authoring patterns and design principles, read [best-practices.md](./references/best-practices.md).
 
 ---
 
@@ -124,7 +124,7 @@ When bundling scripts in `scripts/`:
 6. **Idempotency & Safety**: Support `--dry-run` for stateful or destructive modifications. Ensure
    operations can be retried safely.
 
-For complete script guidelines and multi-language patterns, read [using-scripts.md](references/using-scripts.md).
+For complete script guidelines and multi-language patterns, read [using-scripts.md](./references/using-scripts.md).
 
 ---
 
@@ -139,7 +139,7 @@ For complete script guidelines and multi-language patterns, read [using-scripts.
   validation (40%) sets.
 - Compute trigger rates across multiple runs to verify accuracy before finalizing.
 
-For step-by-step trigger optimization loops, read [optimizing-descriptions.md](references/optimizing-descriptions.md).
+For step-by-step trigger optimization loops, read [optimizing-descriptions.md](./references/optimizing-descriptions.md).
 
 ### B. Output Quality Evaluation
 
@@ -149,8 +149,8 @@ For step-by-step trigger optimization loops, read [optimizing-descriptions.md](r
   to measure the pass rate and token/time deltas.
 - Grade assertions objectively requiring concrete evidence from generated outputs.
 
-For full eval-driven iteration workflows, read [evaluating-skills.md](references/evaluating-skills.md).
-For a step-by-step tutorial on creating a skill from scratch, read [quickstart.md](references/quickstart.md).
+For full eval-driven iteration workflows, read [evaluating-skills.md](./references/evaluating-skills.md).
+For a step-by-step tutorial on creating a skill from scratch, read [quickstart.md](./references/quickstart.md).
 
 ---
 

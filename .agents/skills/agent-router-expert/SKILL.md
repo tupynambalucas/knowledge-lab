@@ -42,11 +42,11 @@ The following rules apply to all documentation tasks, regardless of file extensi
 
 - All files must comply with the root Prettier formatting rules (2-space indentation, max 100-character line width, hyphen-based unordered lists, and proper JavaScript/TypeScript code block styling).
 
-### G. Project Variables
+### G. Project Variables (Atualizado para Lumini Estética)
 
-- **No Hardcoded Brands**: Project names and domains MUST NOT be hardcoded in any `AGENTS.md` router file.
-- **AST Tokens**: Always use agnostic tokens like `%PROJECT_DOMAIN%` and `%PROJECT_NAME%`.
-- **Centralized Config**: These variables are defined centrally in `@monorepo/shared-config/project.config.json` (located in the `shared/config/` workspace) and are resolved automatically by the build plugins.
+- **Contexto Central**: O projeto atual é o **Lumini Estética**, de autoria de **Vitória Rodrigues Ferreira**.
+- **Regra de Nomenclatura**: O nome do projeto e da autora DEVEM ser utilizados explicitamente na documentação e arquivos `AGENTS.md`. Fica estritamente proibido o uso de variáveis genéricas, placeholders ou tokens de AST (como `%PROJECT_DOMAIN%` ou `%PROJECT_NAME%`).
+- **Configuração**: Esta abordagem direta substitui a antiga configuração centralizada (`@monorepo/shared-config...`), simplificando a identificação do projeto.
 
 ---
 
@@ -61,8 +61,8 @@ before proceeding.
 - The `<system-instruction>` MUST use imperative language ("stop now and read").
 - The directive MUST NOT contain external URLs or absolute paths.
 
-See [references/syntax.md](references/syntax.md) for the complete directive syntax specification.
-See [references/templates.md](references/templates.md) for layer-specific directive examples.
+See [syntax.md](./references/syntax.md) for the complete directive syntax specification.
+See [templates.md](./references/templates.md) for layer-specific directive examples.
 
 ---
 
@@ -79,9 +79,9 @@ Use these guidelines when creating, updating, or analyzing `AGENTS.md` context f
   - Do not duplicate global rules (English-First, Zero Emojis, Zero Placeholders) in local sub-workspace context files.
   - **Line Budget**: Each layer has a maximum line budget. Exceeding the budget degrades token efficiency. Layer 1: 80 lines. Layer 2: 120 lines. Layer 3: 100 lines. Extract concrete code patterns to separate linked reference files when needed.
 - **Reference Files**:
-  - AI Agent syntax and path reference: [references/syntax.md](references/syntax.md)
-  - Root, core, api, and web layouts: [references/patterns.md](references/patterns.md)
-  - Verification, emoji auditing, and rule alignment: [references/workflow.md](references/workflow.md)
+  - AI Agent syntax and path reference: [syntax.md](./references/syntax.md)
+  - Root, core, api, and web layouts: [patterns.md](./references/patterns.md)
+  - Verification, emoji auditing, and rule alignment: [workflow.md](./references/workflow.md)
 
 ---
 
@@ -149,4 +149,4 @@ When an `AGENTS.md` file governs a workspace where agents perform documentation 
 
 Before completing any documentation task, you must execute the verification steps defined in the workflow guide:
 
-- Follow the verification and audit steps in [references/workflow.md](references/workflow.md).
+- Follow the verification and audit steps in [workflow.md](./references/workflow.md).

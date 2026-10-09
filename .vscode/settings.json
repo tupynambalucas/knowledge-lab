@@ -1,0 +1,27 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+  },
+  "files.watcherExclude": {
+    "**/.git/**": true,
+  },
+
+  /* --- Schemas --- */
+
+  /* --- Eslint Config --- */
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": true
+  },
+
+  /* --- Markdown Preview Enhanced --- */
+  "markdown-preview-enhanced.codeBlockTheme": "auto.css",
+  "markdown-preview-enhanced.previewTheme": "github-light.css",
+  "markdown-preview-enhanced.enableWikiLinkSyntax": true,
+
+  /* --- Misc --- */
+  "json.schemaDownload.enable": true,
+  "yaml.schemaStore.enable": true,
+  "yaml.kubernetesCRDStore.enable": true,
+}

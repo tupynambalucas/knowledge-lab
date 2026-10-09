@@ -1,0 +1,9 @@
+{
+  "files": [],
+  "references": [
+    { "path": "../collections" },
+    { "path": "./packages/preset" },
+    { "path": "./packages/theme" },
+    { "path": "./services/portal/tsconfig.build.json" }
+  ]
+}
